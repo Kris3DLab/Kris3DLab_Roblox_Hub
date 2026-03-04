@@ -4,162 +4,423 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kris3DLab | Roblox Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @keyframes moveBackground {
-            0% { background-position: 0px 0px; }
-            100% { background-position: 50px 50px; }
+        :root {
+            --green: #00ff6a;
+            --green-mid: #00b050;
+            --green-dark: #006b2e;
+            --gold: #ffcc00;
+            --bg: #0d0e0f;
+            --card: rgba(18,20,22,0.97);
+            --border: rgba(0,255,106,0.18);
         }
 
-        body { 
-            background-color: #111213; 
-            background-image: radial-gradient(circle, rgba(0,255,106,0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            animation: moveBackground 10s linear infinite;
-            color: #ffffff; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0;
-            scroll-behavior: smooth; /* Ez teszi simává a gyorsgombok ugrását */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 80% 40% at 50% -10%, rgba(0,176,80,0.13) 0%, transparent 70%),
+                radial-gradient(circle, rgba(0,255,106,0.04) 1px, transparent 1px);
+            background-size: auto, 30px 30px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
         }
 
-        .header { 
-            background: linear-gradient(180deg, #00b050 0%, #008037 100%);
-            padding: 40px 20px; 
-            border-bottom: 4px solid #00ff6a;
-            text-align: center;
+        #particles {
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            opacity: 0;
+            animation: floatUp linear infinite;
+            user-select: none;
+        }
+        @keyframes floatUp {
+            0%   { opacity: 0; transform: translateY(0) rotate(0deg) scale(0.7); }
+            10%  { opacity: 0.35; }
+            80%  { opacity: 0.2; }
+            100% { opacity: 0; transform: translateY(-110vh) rotate(360deg) scale(1.1); }
         }
 
-        /* Gyorsgombok menüje */
+        .header {
+            position: relative; padding: 70px 20px 60px;
+            text-align: center; overflow: hidden; z-index: 1;
+        }
+        .header::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(160deg, #003d1f 0%, #001a0d 60%, transparent 100%);
+            z-index: -1;
+        }
+        .header::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--green), transparent);
+            animation: scanLine 3s ease-in-out infinite;
+        }
+        @keyframes scanLine {
+            0%,100% { opacity: 0.4; }
+            50% { opacity: 1; box-shadow: 0 0 20px var(--green); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.2rem, 7vw, 4.5rem);
+            font-weight: 900; letter-spacing: 6px;
+            background: linear-gradient(90deg, #00b050, #00ff6a, #00b050);
+            background-size: 200%;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+        .header-sub {
+            font-size: 1.1rem; color: rgba(255,255,255,0.6);
+            letter-spacing: 3px; text-transform: uppercase; margin-top: 8px;
+        }
+        .header-badge {
+            display: inline-block; margin-top: 18px;
+            background: rgba(0,255,106,0.1); border: 1px solid var(--green);
+            border-radius: 50px; padding: 5px 20px; font-size: 0.8rem;
+            letter-spacing: 2px; color: var(--green);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%,100% { box-shadow: 0 0 0 rgba(0,255,106,0); }
+            50% { box-shadow: 0 0 18px rgba(0,255,106,0.4); }
+        }
+
         .nav-bar {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            text-align: center;
-            border-bottom: 1px solid #00ff6a;
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,11,12,0.92); backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0,255,106,0.2);
+            padding: 12px 20px; text-align: center;
         }
-
         .nav-link {
-            color: #00ff6a;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif; font-size: 0.72rem;
+            letter-spacing: 2px; color: rgba(255,255,255,0.55);
+            text-decoration: none; margin: 0 18px; text-transform: uppercase;
+            transition: color 0.2s; position: relative;
         }
-
-        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
-
-        .card { 
-            background: rgba(30, 31, 33, 0.95); 
-            padding: 30px; 
-            border-radius: 15px; 
-            margin-bottom: 40px; 
-            border: 1px solid #333;
-            text-align: center;
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+            height: 2px; background: var(--green);
+            transform: scaleX(0); transition: transform 0.25s;
         }
+        .nav-link:hover { color: var(--green); }
+        .nav-link:hover::after { transform: scaleX(1); }
 
-        h2 { color: #00ff6a; text-transform: uppercase; }
+        .container { max-width: 1020px; margin: 0 auto; padding: 40px 20px 60px; position: relative; z-index: 1; }
 
-        /* Merch rács elrendezés */
+        .card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 40px 35px; margin-bottom: 50px;
+            position: relative; overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .card::before {
+            content: ''; position: absolute; top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(0,255,106,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .card:hover { border-color: rgba(0,255,106,0.45); box-shadow: 0 0 40px rgba(0,255,106,0.08); }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif; font-size: 1.3rem;
+            color: var(--green); letter-spacing: 3px; margin-bottom: 10px; text-transform: uppercase;
+        }
+        .card-sub { color: rgba(255,255,255,0.5); font-size: 1rem; letter-spacing: 1px; margin-bottom: 25px; }
+
         .merch-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 22px; margin-top: 25px;
         }
-
         .merch-item {
-            background: #252628;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #444;
+            background: #181a1c; border: 1px solid #2a2c2e;
+            border-radius: 14px; padding: 18px; text-align: center;
+            transition: all 0.3s cubic-bezier(.22,1,.36,1);
         }
-
+        .merch-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--green); box-shadow: 0 12px 30px rgba(0,255,106,0.12);
+        }
         .merch-img {
-            width: 100%;
-            height: 150px;
-            background: #333; /* Ez a helyőrző a képednek */
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
+            width: 100%; aspect-ratio: 1;
+            background: linear-gradient(135deg, #1e2022, #252830);
+            border-radius: 10px; margin-bottom: 14px;
+            display: flex; align-items: center; justify-content: center; font-size: 3rem;
+        }
+        .merch-name { font-size: 1rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; color: #ddd; }
+
+        .btn {
+            display: inline-block; font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+            padding: 13px 28px; border-radius: 10px; text-decoration: none;
+            border: none; cursor: pointer; margin: 8px;
+            transition: all 0.2s cubic-bezier(.22,1,.36,1);
+            position: relative; overflow: hidden; text-transform: uppercase;
+        }
+        .btn:active { transform: scale(0.96) !important; }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--green-mid), #00cc5a); color: #fff;
+            box-shadow: 0 5px 0 var(--green-dark), 0 8px 20px rgba(0,176,80,0.3);
+        }
+        .btn-green:hover { transform: translateY(-3px); box-shadow: 0 8px 0 var(--green-dark), 0 15px 30px rgba(0,176,80,0.4); }
+
+        .btn-discord {
+            background: linear-gradient(135deg, #5865F2, #7289da); color: #fff;
+            box-shadow: 0 5px 0 #3e48ab, 0 8px 20px rgba(88,101,242,0.3);
+        }
+        .btn-discord:hover { transform: translateY(-3px); box-shadow: 0 8px 0 #3e48ab, 0 15px 30px rgba(88,101,242,0.4); }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #ffcc00, #ffaa00); color: #000;
+            box-shadow: 0 5px 0 #b38f00, 0 8px 20px rgba(255,170,0,0.35);
+            font-size: 0.85rem;
+        }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 8px 0 #b38f00, 0 15px 30px rgba(255,170,0,0.5); }
+
+        .btn-disabled { background: #252628; color: #555; box-shadow: 0 5px 0 #1a1b1d; cursor: not-allowed; }
+
+        .link-grid { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+        .link-card {
+            background: #181a1c; border: 1px solid #2a2c2e;
+            border-radius: 14px; padding: 22px 30px;
+            text-decoration: none; color: #fff; font-weight: 700;
+            letter-spacing: 1px; font-size: 1rem;
+            display: flex; align-items: center; gap: 12px;
+            flex: 1; min-width: 200px; transition: all 0.3s;
+        }
+        .link-card:hover { transform: translateY(-5px); border-color: var(--green); box-shadow: 0 10px 25px rgba(0,255,106,0.1); }
+        .link-card .icon { font-size: 1.8rem; }
+
+        /* DONATION */
+        #tamogatas { position: relative; }
+        .donation-glow {
+            position: absolute; inset: 0; border-radius: 20px;
+            background: radial-gradient(ellipse at 50% 100%, rgba(255,204,0,0.07) 0%, transparent 65%);
+            pointer-events: none;
         }
 
-        .btn { 
-            display: inline-block;
-            background: #00b050; 
-            color: white; 
-            padding: 12px 25px; 
-            text-decoration: none; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            box-shadow: 0 4px 0 #006b2e;
-            transition: 0.2s;
-            border: none;
-            cursor: pointer;
+        .robux-counter {
+            font-family: 'Orbitron', sans-serif; font-size: 2.8rem; font-weight: 900;
+            color: var(--gold); letter-spacing: 3px; margin: 15px 0;
+            animation: countGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes countGlow {
+            0%,100% { text-shadow: 0 0 10px rgba(255,204,0,0.3); }
+            50% { text-shadow: 0 0 35px rgba(255,204,0,0.9), 0 0 70px rgba(255,204,0,0.3); }
+        }
+        .support-note { font-size: 0.88rem; color: rgba(255,255,255,0.32); letter-spacing: 1px; margin-top: 18px; }
+
+        /* ROBUX FLOATERS */
+        #robux-floaters {
+            position: fixed; inset: 0; pointer-events: none; z-index: 50;
+            opacity: 0; transition: opacity 0.6s;
+        }
+        #robux-floaters.active { opacity: 1; }
+        .robux-float {
+            position: absolute; font-family: 'Orbitron', sans-serif;
+            font-weight: 900; animation: rbxFloat linear infinite; opacity: 0;
+        }
+        @keyframes rbxFloat {
+            0%   { opacity: 0; transform: translateY(0) rotate(-10deg) scale(0.6); }
+            15%  { opacity: 0.9; }
+            85%  { opacity: 0.5; }
+            100% { opacity: 0; transform: translateY(-140px) rotate(20deg) scale(1.15); }
         }
 
-        .btn:hover { background: #00ff6a; color: #000; transform: translateY(-2px); }
-        .btn.donate { background: #ffcc00; color: #000; box-shadow: 0 4px 0 #b38f00; }
-        .btn.discord { background: #5865F2; box-shadow: 0 4px 0 #3e48ab; }
+        footer {
+            text-align: center; padding: 40px 20px;
+            color: rgba(255,255,255,0.2); font-size: 0.85rem;
+            letter-spacing: 2px; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        footer span { color: var(--green); }
 
-        footer { text-align: center; padding: 40px; color: #666; }
+        @media (max-width: 600px) {
+            .btn { width: calc(100% - 16px); }
+            .nav-link { margin: 0 8px; font-size: 0.62rem; }
+            .link-card { min-width: 150px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>KRIS3DLAB</h1>
-        <p>Roblox Content & Community</p>
-    </div>
+<div id="particles"></div>
+<div id="robux-floaters"></div>
 
-    <div class="nav-bar">
-        <a href="#merch" class="nav-link">Merch</a>
-        <a href="#links" class="nav-link">Linkek</a>
-        <a href="#támogatás" class="nav-link">Támogatás</a>
-    </div>
+<div class="header">
+    <h1>KRIS3DLAB</h1>
+    <div class="header-sub">Roblox Content &amp; Community</div>
+    <div class="header-badge">🟢 Magyar Roblox Közösség</div>
+</div>
 
-    <div class="container">
-        
-        <div class="card" id="merch">
-            <h2>Saját Merch</h2>
-            <p>Válogass a legújabb Roblox ruháim közül!</p>
-            <div class="merch-grid">
-                <div class="merch-item">
-                    <div class="merch-img">Póló Kép helye</div>
-                    <p>Kris3D Classic Póló</p>
-                    <a href="#" class="btn">Megnézem</a>
-                </div>
-                <div class="merch-item">
-                    <div class="merch-img">Nadrág Kép helye</div>
-                    <p>Hacker Zöld Nadrág</p>
-                    <a href="#" class="btn">Megnézem</a>
-                </div>
+<div class="nav-bar">
+    <a href="#merch" class="nav-link">Merch</a>
+    <a href="#kozosseg" class="nav-link">Közösség</a>
+    <a href="#tamogatas" class="nav-link">Támogatás</a>
+</div>
+
+<div class="container">
+
+    <div class="card reveal" id="merch">
+        <div class="card-title">⚡ Saját Merch</div>
+        <div class="card-sub">Válassz a legjobb Roblox ruhák közül</div>
+        <div class="merch-grid">
+            <div class="merch-item reveal" style="transition-delay:0.1s">
+                <div class="merch-img">👕</div>
+                <div class="merch-name">Kris3D Classic Póló</div>
+                <a href="#" class="btn btn-green">Megnézem</a>
+            </div>
+            <div class="merch-item reveal" style="transition-delay:0.2s">
+                <div class="merch-img">👖</div>
+                <div class="merch-name">Hacker Zöld Nadrág</div>
+                <a href="#" class="btn btn-green">Megnézem</a>
+            </div>
+            <div class="merch-item reveal" style="transition-delay:0.3s">
+                <div class="merch-img">🎩</div>
+                <div class="merch-name">Lab Sapka (Hamarosan)</div>
+                <a href="#" class="btn btn-disabled">Hamarosan</a>
             </div>
         </div>
-
-        <div class="card" id="links">
-            <h2>Közösség</h2>
-            <p>Itt találsz meg minket:</p>
-            <a href="https://discord.gg/FYFN7MHkTG" target="_blank" class="btn discord">Discord Szerver</a>
-            <a href="https://www.youtube.com/@Kris3DLab" target="_blank" class="btn">YouTube</a>
-        </div>
-
-        <div class="card" id="támogatás">
-            <h2>Támogatás</h2>
-            <p>Ha tetszik amit csinálok, itt tudod segíteni a csatornát:</p>
-            <a href="#" class="btn donate">Donation (Hamarosan)</a>
-            <p style="font-size: 0.8rem; margin-top: 15px; color: #888;">A támogatás nem kötelező, de nagy segítség!</p>
-        </div>
-
     </div>
 
-    <footer>
-        &copy; 2026 Kris3DLab | Minden jog fenntartva.
-    </footer>
+    <div class="card reveal" id="kozosseg">
+        <div class="card-title">🌐 Közösség</div>
+        <div class="card-sub">Csatlakozz — ne maradj le semmiről!</div>
+        <div class="link-grid">
+            <a href="https://discord.gg/FYFN7MHkTG" target="_blank" class="link-card">
+                <span class="icon">💬</span>
+                <div>
+                    <div style="font-size:0.72rem;color:#aaa;letter-spacing:2px;margin-bottom:3px;">DISCORD</div>
+                    <div>Szerver</div>
+                </div>
+            </a>
+            <a href="https://www.youtube.com/@Kris3DLab" target="_blank" class="link-card">
+                <span class="icon">▶️</span>
+                <div>
+                    <div style="font-size:0.72rem;color:#aaa;letter-spacing:2px;margin-bottom:3px;">YOUTUBE</div>
+                    <div>@Kris3DLab</div>
+                </div>
+            </a>
+            <a href="#" class="link-card" style="opacity:0.38;cursor:not-allowed;">
+                <span class="icon">🎮</span>
+                <div>
+                    <div style="font-size:0.72rem;color:#aaa;letter-spacing:2px;margin-bottom:3px;">ROBLOX</div>
+                    <div>Csoport (Hamarosan)</div>
+                </div>
+            </a>
+        </div>
+    </div>
 
+    <div class="card reveal" id="tamogatas">
+        <div class="donation-glow"></div>
+        <div class="card-title">💛 Támogatás</div>
+        <div class="card-sub">Ha tetszik amit csinálok, itt tudod segíteni a csatornát</div>
+
+        <div class="robux-counter">
+            <span>R$</span><span id="countNum">0</span>
+        </div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.28);letter-spacing:2px;margin-bottom:28px;font-family:'Orbitron',sans-serif;">ÖSSZEGYŰJTVE · HAMAROSAN</div>
+
+        <a href="#" class="btn btn-gold">💰 Donation (Hamarosan)</a>
+        <div class="support-note">A támogatás nem kötelező, de nagy segítség! ❤️</div>
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2026 <span>Kris3DLab</span> — Készült a magyar Roblox közösségnek.
+</footer>
+
+<script>
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+reveals.forEach(r => revObs.observe(r));
+
+// BG PARTICLES
+const pCont = document.getElementById('particles');
+const syms = ['✦','◆','▸','●','◉','✧','⬡','◈'];
+for (let i = 0; i < 24; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.textContent = syms[Math.floor(Math.random() * syms.length)];
+    p.style.cssText = `
+        left:${Math.random()*100}vw;
+        bottom:-30px;
+        color:rgba(0,255,106,${0.04 + Math.random()*0.1});
+        animation-duration:${14 + Math.random()*22}s;
+        animation-delay:${Math.random()*22}s;
+        font-size:${0.7 + Math.random()*1.2}rem;
+    `;
+    pCont.appendChild(p);
+}
+
+// ROBUX FLOATERS
+const rbxCont = document.getElementById('robux-floaters');
+const rbxSym = ['R$','R$','R$','💰','R$','✦','R$','💛','R$'];
+
+for (let i = 0; i < 20; i++) {
+    const el = document.createElement('div');
+    el.className = 'robux-float';
+    const isRobux = Math.random() > 0.35;
+    el.textContent = rbxSym[Math.floor(Math.random() * rbxSym.length)];
+    el.style.cssText = `
+        color:${isRobux ? '#ffcc00' : '#00ff6a'};
+        font-size:${1.1 + Math.random()*1.8}rem;
+        left:${5 + Math.random()*88}vw;
+        top:${15 + Math.random()*60}vh;
+        animation-duration:${2 + Math.random()*3}s;
+        animation-delay:${Math.random()*3}s;
+        text-shadow:0 0 12px ${isRobux ? 'rgba(255,204,0,0.7)' : 'rgba(0,255,106,0.6)'};
+    `;
+    rbxCont.appendChild(el);
+}
+
+// Watch donation visibility
+const donSec = document.getElementById('tamogatas');
+const rbxObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        rbxCont.classList.toggle('active', e.isIntersecting);
+    });
+}, { threshold: 0.15 });
+rbxObs.observe(donSec);
+
+// COUNTER ANIMATION
+let counted = false;
+const cntObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting && !counted) {
+            counted = true;
+            let val = 0;
+            const target = 1337;
+            const el = document.getElementById('countNum');
+            const iv = setInterval(() => {
+                val = Math.min(val + Math.ceil(target / 55), target);
+                el.textContent = val.toLocaleString('hu');
+                if (val >= target) {
+                    clearInterval(iv);
+                    setTimeout(() => { counted = false; el.textContent = '0'; }, 7000);
+                }
+            }, 20);
+        }
+    });
+}, { threshold: 0.4 });
+cntObs.observe(donSec);
+</script>
 </body>
 </html>
