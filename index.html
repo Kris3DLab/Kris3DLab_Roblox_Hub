@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kris3DLab | Roblox Hub</title>
     <style>
+        /* Animált háttér effekt */
+        @keyframes moveBackground {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 50px 50px; }
+        }
+
         /* Alapbeállítások - Sötét Roblox téma */
         body { 
             background-color: #111213; 
+            background-image: radial-gradient(circle, rgba(0,255,106,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: moveBackground 10s linear infinite;
             color: #ffffff; 
-            font-family: 'Montserrat', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0;
             padding: 0;
             text-align: center;
@@ -20,57 +29,65 @@
             background: linear-gradient(180deg, #00b050 0%, #008037 100%);
             padding: 60px 20px; 
             border-bottom: 4px solid #00ff6a;
-            box-shadow: 0px 5px 20px rgba(0, 255, 106, 0.2);
+            box-shadow: 0px 5px 20px rgba(0, 255, 106, 0.3);
         }
 
-        h1 { margin: 0; font-size: 3rem; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        p { font-size: 1.1rem; opacity: 0.9; }
+        h1 { margin: 0; font-size: 3.5rem; text-transform: uppercase; letter-spacing: 3px; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); }
+        .header p { font-size: 1.2rem; opacity: 0.9; font-weight: bold; }
 
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
 
         /* Kártyák a tartalomnak */
         .card { 
-            background: #1e1f21; 
+            background: rgba(30, 31, 33, 0.95); 
             padding: 30px; 
             border-radius: 15px; 
             margin-bottom: 30px; 
             border: 1px solid #333;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
-        .card:hover { transform: translateY(-5px); border-color: #00ff6a; }
+        .card:hover { transform: translateY(-8px); border-color: #00ff6a; box-shadow: 0 10px 20px rgba(0,255,106,0.1); }
 
-        h2 { color: #00ff6a; margin-top: 0; text-transform: uppercase; }
+        h2 { color: #00ff6a; margin-top: 0; text-transform: uppercase; font-size: 1.8rem; }
 
         /* Gombok stílusa */
         .btn { 
             display: inline-block;
             background: #00b050; 
             color: white; 
-            padding: 15px 30px; 
+            padding: 15px 35px; 
             text-decoration: none; 
-            border-radius: 8px; 
+            border-radius: 10px; 
             font-weight: bold; 
             font-size: 1.1rem;
             margin: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 0 #006b2e;
+            transition: all 0.2s;
+            box-shadow: 0 5px 0 #006b2e;
+            border: none;
+            cursor: pointer;
         }
 
-        .btn:hover { background: #00ff6a; color: #000; box-shadow: 0 4px 0 #00b050; transform: scale(1.05); }
+        .btn:hover { background: #00ff6a; color: #000; box-shadow: 0 5px 0 #00b050; transform: translateY(-2px); }
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #00b050; }
 
-        .btn.discord { background: #5865F2; box-shadow: 0 4px 0 #3e48ab; }
-        .btn.discord:hover { background: #7289da; color: white; }
+        /* Speciális Discord gomb */
+        .btn.discord { background: #5865F2; box-shadow: 0 5px 0 #3e48ab; }
+        .btn.discord:hover { background: #7289da; color: white; box-shadow: 0 5px 0 #5865F2; }
 
-        .btn.disabled { background: #444; box-shadow: 0 4px 0 #222; cursor: not-allowed; opacity: 0.7; }
+        /* Kikapcsolt gomb */
+        .btn.disabled { background: #444; box-shadow: 0 5px 0 #222; cursor: not-allowed; opacity: 0.6; }
+        .btn.disabled:hover { transform: none; color: white; }
 
-        /* YouTube beágyazás */
+        /* YouTube beágyazás javítva */
         .video-container {
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            border-radius: 10px;
+            border-radius: 12px;
             background: #000;
+            border: 2px solid #333;
         }
         .video-container iframe {
             position: absolute;
@@ -81,45 +98,51 @@
             border: none;
         }
 
-        footer { margin-top: 50px; padding: 20px; font-size: 0.8rem; color: #666; }
+        footer { margin: 60px 0 30px 0; padding: 20px; font-size: 0.9rem; color: #888; border-top: 1px solid #333; }
+        
+        /* Mobil optimalizálás */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .btn { width: 100%; box-sizing: border-box; }
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Kris3DLab</h1>
-        <p>A hivatalos Roblox Hub és közösségi oldal</p>
+        <h1>KRIS3DLAB</h1>
+        <p>A hivatalos Roblox Hub</p>
     </div>
 
     <div class="container">
         
         <div class="card">
             <h2>Legutóbbi Videóm</h2>
-           <div class="video-container">
-    <iframe src="https://www.youtube.com/embed/Ssh8-2hV7S0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/Ssh8-2hV7S0" title="Kris3DLab Video" allowfullscreen></iframe>
             </div>
-            <p style="margin-top:15px;">Iratkozz fel, hogy ne maradj le az új tutorialokról!</p>
+            <p style="margin-top:20px; font-style: italic; color: #bbb;">Kattints a lejátszáshoz és iratkozz fel!</p>
         </div>
 
         <div class="card">
-            <h2>Csatlakozz a közösséghez</h2>
-            <p>Itt megtalálsz minden fontos elérhetőséget:</p>
+            <h2>Elérhetőségek</h2>
+            <p>Csatlakozz a közösséghez és ne maradj le semmiről!</p>
             
-            <a href="https://discord.gg/FYFN7MHkTG" target="_blank" class="btn discord">Discord Szerver</a>
-            <a href="https://www.youtube.com/@Kris3DLab" target="_blank" class="btn">YouTube Csatorna</a>
-            <a href="#" class="btn disabled">Roblox Csoport (Hamarosan!)</a>
+            <a href="https://discord.gg/FYFN7MHkTG" target="_blank" class="btn discord">DISCORD SZERVER</a>
+            <a href="https://www.youtube.com/@Kris3DLab" target="_blank" class="btn">YOUTUBE CSATORNA</a>
+            <a href="#" class="btn disabled">ROBLOX CSOPORT (Hamarosan!)</a>
         </div>
 
         <div class="card">
-            <h2>Mi az a Kris3DLab?</h2>
-            <p>Bár a nevemben ott a "3D", jelenleg a Roblox világára koncentrálok. Segítek a kezdőknek eligazodni, tutorialokat készítek és együtt játszunk a szervereken!</p>
+            <h2>Kicsi infó</h2>
+            <p>Üdv a Kris3DLab-en! Ez az oldal azért jött létre, hogy egy helyen megtaláljátok az összes Robloxos tutorialomat, ruhámat és a közösségi linkjeimet. </p>
+            <p style="color: #00ff6a;">Érezd jól magad a laborban!</p>
         </div>
 
     </div>
 
     <footer>
-        &copy; 2026 Kris3DLab - Minden jog fenntartva. | Készült unalomból, de szívvel.
+        &copy; 2026 Kris3DLab - Készült a magyar Roblox közösségnek.
     </footer>
 
 </body>
